@@ -4,6 +4,13 @@
     name: nginx
     update_cache: yes
 
+- name: Add http configuration
+  copy:
+    dest: /etc/nginx/conf.d/http.conf
+    src: http.conf
+  notify:
+    - reload nginx
+
 - name: Remove sites configuration
   file:
     path: /etc/nginx/sites-available/{{ item.key }}
