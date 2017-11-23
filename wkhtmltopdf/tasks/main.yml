@@ -1,0 +1,30 @@
+---
+- name: Install dependencies
+  apt:
+    name: '{{ item }}'
+    update_cache: true
+  with_items:
+    - libxrender1
+    - libfontconfig1
+    - libxext6
+
+- name: Create wkhtmltopdf directory
+  file:
+    path: /opt/wkhtmltopdf-{{ version }}
+    state: directory
+
+- name: Get and unarchive wkhtmltopdf
+  unarchive:
+    src: https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/{{ version }}/wkhtmltox-{{ version }}_linux-generic-amd64.tar.xz
+    dest: /opt/wkhtmltopdf-{{ version }}
+    remote_src: true
+    extra_opts: --strip-components=1
+
+- name: Link binaries
+  file:
+    path: /usr/local/bin/{{ item }}
+    state: link
+    src: /opt/wkhtmltopdf-{{ version }}/bin/{{ item }}
+  with_items:
+    - wkhtmltoimage
+    - wkhtmltopdf
