@@ -1,0 +1,25 @@
+---
+- name: Install packages
+  apt:
+    name:
+      - postgresql
+      - '{{ (ansible_python_version is version("3.0.0", ">=")) | ternary("python3-psycopg2", "python-psycopg2") }}'
+    update_cache: true
+
+- name: Create databases
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: '{{ item.key }}'
+    state: present
+  with_dict: '{{ databases }}'
+
+- name: Create users
+  become: true
+  become_user: postgres
+  postgresql_user:
+    name: '{{ item.key }}'
+    state: present
+    password: '{{ item.value.password }}'
+    db: '{{ item.value.database }}'
+  with_dict: '{{ users }}'
