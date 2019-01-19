@@ -1,0 +1,21 @@
+[Unit]
+Description={{ description }}
+After=network.target
+{% for value in requires|default([]) %}
+Requires={{ value }}.service
+{% endfor %}
+
+
+[Service]
+Type=simple
+User={{ user }}
+Group={{ group }}
+WorkingDirectory={{ working_directory }}
+{% for key, value in env|dictsort %}
+Environment="{{ key }}={{ value }}"
+{% endfor %}
+ExecStart={{ command }}
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
