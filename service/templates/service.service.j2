@@ -10,7 +10,9 @@ Requires={{ value }}.service
 Type=simple
 User={{ user }}
 Group={{ group }}
+{% if working_directory is defined %}
 WorkingDirectory={{ working_directory }}
+{% endif %}
 {% for key, value in env|dictsort %}
 Environment="{{ key }}={{ value }}"
 {% endfor %}
