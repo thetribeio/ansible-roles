@@ -1,0 +1,16 @@
+---
+- postgresql_db:
+    name: '{{ db.key }}'
+    state: present
+    owner: '{{ db.value.owner }}'
+  become: true
+  become_user: postgres
+
+- postgresql_ext:
+    name: '{{ ext }}'
+    db: '{{ db.key }}'
+  with_items: '{{ db.value.exts|default([]) }}'
+  loop_control:
+    loop_var: ext
+  become: true
+  become_user: postgres
