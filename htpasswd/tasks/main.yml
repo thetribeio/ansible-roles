@@ -1,0 +1,11 @@
+---
+- name: Install required dependencies
+  apt:
+    name: python3-passlib
+    update_cache: true
+
+- name: Add user to htpasswd
+  htpasswd:
+    path: '{{ htpasswd_path }}'
+    name: '{{ htpasswd_user }}'
+    password: '{{ htpasswd_password }}'

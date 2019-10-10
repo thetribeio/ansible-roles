@@ -7,6 +7,14 @@
 
 - meta: flush_handlers
 
+- include_role:
+    name: htpasswd
+  vars:
+    htpasswd_path: /etc/nginx/{{ site }}.htpasswd
+    htpasswd_user: '{{ basic_auth_user|default(site) }}'
+    htpasswd_password: '{{ basic_auth_password }}'
+  when: basic_auth_password is defined
+
 - import_role:
     name: letsencrypt
   vars:
