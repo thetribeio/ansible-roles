@@ -4,6 +4,9 @@
     name: nginx
     update_cache: yes
 
+- include: htpasswd.yml
+  when: admin_password is defined
+
 - name: Add http configuration
   copy:
     dest: /etc/nginx/conf.d/http.conf
