@@ -2,6 +2,7 @@
 - name: Add certbot repository
   apt_repository:
     repo: 'ppa:certbot/certbot'
+  when: ansible_distribution == 'Ubuntu'
 
 - name: Install certbot package
   apt:
