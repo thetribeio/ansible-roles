@@ -8,4 +8,3 @@ default_sites:
         return 404;
       }
     }
-default_admin_name: admin
