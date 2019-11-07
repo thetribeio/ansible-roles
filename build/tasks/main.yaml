@@ -20,13 +20,13 @@
   retries: 180
   delay: 10
   vars:
-    query: '[?vcs_revision==`{{ last_commit_sha }}` && workflows.job_name==`build-archives`] | [0]'
+    query: '[?vcs_revision==`{{ last_commit_sha }}` && workflows.job_name==`{{ job_name }}`] | [0]'
 
 - name: Register last_build variable
   set_fact:
     last_build: '{{ builds.json|json_query(query) }}'
   vars:
-    query: '[?vcs_revision==`{{ last_commit_sha }}` && workflows.job_name==`build-archives`] | [0]'
+    query: '[?vcs_revision==`{{ last_commit_sha }}` && workflows.job_name==`{{ job_name }}`] | [0]'
 
 - name: Check that build succeeded
   fail:
