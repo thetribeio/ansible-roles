@@ -5,7 +5,6 @@ After=network.target
 Requires={{ value }}.service
 {% endfor %}
 
-
 [Service]
 Type=simple
 User={{ user }}
@@ -14,7 +13,7 @@ Group={{ group }}
 WorkingDirectory={{ working_directory }}
 {% endif %}
 {% for key, value in env|dictsort %}
-Environment="{{ key }}={{ value }}"
+Environment="{{ key }}={{ value|replace('\\', '\\x5c')|replace('"', '\\x22') }}"
 {% endfor %}
 ExecStart={{ command }}
 Restart=always
