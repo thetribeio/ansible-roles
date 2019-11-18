@@ -16,7 +16,7 @@
     path: /etc/nginx/sites-available/{{ item.key }}
     state: absent
   when: item.value is none
-  with_dict: '{{ default_sites|combine(sites) }}'
+  loop: '{{ default_sites|combine(sites)|dict2items }}'
   notify:
     - reload nginx
 
@@ -25,7 +25,7 @@
     content: '{{ item.value }}'
     dest: /etc/nginx/sites-available/{{ item.key }}
   when: item.value is not none
-  with_dict: '{{ default_sites|combine(sites) }}'
+  loop: '{{ default_sites|combine(sites)|dict2items }}'
   notify:
     - reload nginx
 
@@ -34,7 +34,7 @@
     path: /etc/nginx/sites-enabled/{{ item.key }}
     state: absent
   when: item.value is none
-  with_dict: '{{ default_sites|combine(sites) }}'
+  loop: '{{ default_sites|combine(sites)|dict2items }}'
   notify:
     - reload nginx
 
@@ -44,7 +44,7 @@
     state: link
     src: /etc/nginx/sites-available/{{ item.key }}
   when: item.value is not none
-  with_dict: '{{ default_sites|combine(sites) }}'
+  loop: '{{ default_sites|combine(sites)|dict2items }}'
   notify:
     - reload nginx
 
