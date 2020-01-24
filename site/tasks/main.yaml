@@ -13,7 +13,7 @@
     htpasswd_path: /etc/nginx/{{ site }}.htpasswd
     htpasswd_user: '{{ basic_auth_user|default(site) }}'
     htpasswd_password: '{{ basic_auth_password }}'
-  when: basic_auth_password is defined
+  when: basic_auth_password is defined and basic_auth_password is not none
 
 - import_role:
     name: letsencrypt
