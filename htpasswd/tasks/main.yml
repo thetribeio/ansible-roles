@@ -1,7 +1,7 @@
 ---
 - name: Install required dependencies
   apt:
-    name: python3-passlib
+    name: '{{ (ansible_python_version is version("3.0.0", ">=")) | ternary("python3-passlib", "python-passlib") }}'
     update_cache: true
 
 - name: Add user to htpasswd
