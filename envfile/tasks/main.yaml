@@ -1,0 +1,4 @@
+- name: Create env file
+  template:
+    src: envfile.j2
+    dest: '{{ path }}'
