@@ -1,0 +1,35 @@
+---
+- name: Add apt repository
+  apt_repository:
+    repo: 'ppa:ondrej/php'
+
+- name: Install php
+  apt:
+    name: php{{ version }}-fpm
+    update_cache: true
+
+- name: Install php extensions
+  apt:
+    name: php{{ version }}-{{ item }}
+    update_cache: true
+  with_items: '{{ extensions }}'
+
+- name: Remove default pool configuration
+  file:
+    path: /etc/php/{{ version }}/fpm/pool.d/www.conf
+    state: absent
+  notify:
+    - restart php-fpm
+
+- name: Install pool config
+  template:
+    src: pool.conf.j2
+    dest: /etc/php/{{ version }}/fpm/pool.d/{{ pool }}.conf
+  notify:
+    - restart php-fpm
+
+- name: Start the php-fpm service
+  service:
+    name: php{{ version }}-fpm
+    state: started
+    enabled: true
