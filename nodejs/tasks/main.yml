@@ -11,7 +11,7 @@
 
 - name: Add NodeJS APT repo
   apt_repository:
-    repo: deb https://deb.nodesource.com/node_{{ version }}.x xenial main
+    repo: deb https://deb.nodesource.com/node_{{ version }}.x {{ ansible_distribution_release }} main
     state: present
     filename: nodesource
 
