@@ -13,10 +13,10 @@
     name: '{{ item.key }}'
     state: present
     password: '{{ item.value.password }}'
-  with_dict: '{{ users }}'
+  loop: '{{ users|dict2items }}'
 
 - name: Create databases
   include_tasks: db.yaml
-  with_dict: '{{ dbs }}'
+  loop: '{{ dbs|dict2items }}'
   loop_control:
     loop_var: db
