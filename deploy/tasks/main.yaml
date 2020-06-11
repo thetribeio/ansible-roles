@@ -10,7 +10,7 @@
   set_fact:
     artifact_url: '{{ artifacts.json|json_query(query) }}'
   vars:
-    query: '[?path==`home/circleci/project/{{ artifact }}`].url | [0]'
+    query: '[?path==`{{ (artifact_path is defined) | ternary(artifact_path, "home/circleci/project/" ~ artifact|default("")) }}`].url | [0]'
 
 - name: Initialize the deploy
   deploy_helper:
