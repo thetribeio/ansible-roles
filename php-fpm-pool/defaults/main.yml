@@ -1,0 +1,4 @@
+settings: {}
+admin_settings: {}
+pm:
+  max_children: 5
