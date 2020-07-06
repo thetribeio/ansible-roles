@@ -6,7 +6,7 @@ Requires={{ value }}.service
 {% endfor %}
 
 [Service]
-Type=simple
+Type={{ service_type|default('simple') }}
 User={{ user }}
 Group={{ group }}
 {% if working_directory is defined %}
