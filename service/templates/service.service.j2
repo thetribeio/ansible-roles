@@ -6,7 +6,7 @@ Requires={{ value }}.service
 {% endfor %}
 
 [Service]
-Type=simple
+Type={{ service_type }}
 User={{ user }}
 Group={{ group }}
 {% if working_directory is defined %}
@@ -16,7 +16,13 @@ WorkingDirectory={{ working_directory }}
 Environment="{{ key }}={{ value|replace('\\', '\\x5c')|replace('"', '\\x22') }}"
 {% endfor %}
 ExecStart={{ command }}
-Restart=always
+{% if exec_stop is defined %}
+ExecStop={{ exec_stop }}
+{% endif %}
+Restart={{ restart_mode }}
+{% if remain_after_exit is defined %}
+RemainAfterExit={{ remain_after_exit }}
+{% endif %}
 
 [Install]
 WantedBy=multi-user.target
