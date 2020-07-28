@@ -13,7 +13,7 @@ Group={{ group }}
 WorkingDirectory={{ working_directory }}
 {% endif %}
 {% for key, value in env|dictsort %}
-Environment="{{ key }}={{ value|replace('\\', '\\x5c')|replace('"', '\\x22') }}"
+Environment="{{ key }}={{ value|replace('\\', '\\x5c')|replace('"', '\\x22')|replace('%', '%%') }}"
 {% endfor %}
 ExecStart={{ command }}
 {% if exec_stop is defined %}
