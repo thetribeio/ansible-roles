@@ -12,6 +12,7 @@
   file:
     path: /opt/wkhtmltopdf-{{ version }}
     state: directory
+    mode: 0755
 
 - name: Get and unarchive wkhtmltopdf
   unarchive:
@@ -19,9 +20,10 @@
     dest: /opt/wkhtmltopdf-{{ version }}
     remote_src: true
     extra_opts: --strip-components=1
+    mode: preserve
 
 - name: Link binaries
-  file:
+  file: # noqa 208
     path: /usr/local/bin/{{ item }}
     state: link
     src: /opt/wkhtmltopdf-{{ version }}/bin/{{ item }}
