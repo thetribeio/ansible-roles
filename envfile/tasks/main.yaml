@@ -2,3 +2,4 @@
   template:
     src: envfile.j2
     dest: '{{ path }}'
+    mode: 0600

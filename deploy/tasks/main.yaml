@@ -20,11 +20,13 @@
   file:
     path: '{{ deploy_helper.new_release_path }}'
     state: directory
+    mode: 0755
 
 - name: Add an unfinished file
   file:
     path: '{{ deploy_helper.new_release_path }}/{{ deploy_helper.unfinished_filename }}'
     state: touch
+    mode: 0644
 
 - name: Download the archive
   get_url:
@@ -36,6 +38,7 @@
     copy: false
     src: '{{ deploy_helper.new_release_path }}/archive.tar.gz'
     dest: '{{ deploy_helper.new_release_path }}'
+    mode: preserve
 
 - name: Remove the archive
   file:
