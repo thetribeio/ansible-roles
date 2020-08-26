@@ -23,7 +23,7 @@
     mode: preserve
 
 - name: Link binaries
-  file: # noqa 208
+  file:
     path: /usr/local/bin/{{ item }}
     state: link
     src: /opt/wkhtmltopdf-{{ version }}/bin/{{ item }}

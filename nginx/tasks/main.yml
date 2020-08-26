@@ -41,7 +41,7 @@
     - reload nginx
 
 - name: Enable sites configurations
-  file: # noqa 208
+  file:
     path: /etc/nginx/sites-enabled/{{ item.key }}
     state: link
     src: /etc/nginx/sites-available/{{ item.key }}
