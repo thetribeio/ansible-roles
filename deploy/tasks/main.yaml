@@ -34,11 +34,10 @@
     dest: '{{ deploy_helper.new_release_path }}/archive.tar.gz'
 
 - name: Extract the archive
-  unarchive:
-    copy: false
+  unarchive: # noqa 208
+    remote_src: true
     src: '{{ deploy_helper.new_release_path }}/archive.tar.gz'
     dest: '{{ deploy_helper.new_release_path }}'
-    mode: preserve
 
 - name: Remove the archive
   file:
