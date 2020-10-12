@@ -12,6 +12,11 @@
   vars:
     query: '[?path==`{{ (artifact_path is defined) | ternary(artifact_path, "home/circleci/project/" ~ artifact|default("")) }}`].url | [0]'
 
+- name: Check that the artifact was found
+  fail:
+    msg: 'Specified artifact could not be found: {{ artifact }}'
+  when: (artifact_url | length) == 0
+
 - name: Initialize the deploy
   deploy_helper:
     path: '{{ path }}'
