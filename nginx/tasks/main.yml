@@ -3,6 +3,12 @@
   apt:
     name: nginx
     update_cache: yes
+  when: nginx_installed is not defined
+
+- name: Set nginx_installed
+  set_fact:
+    nginx_installed: true
+  when: nginx_installed is not defined
 
 - name: Add http configuration
   copy:
