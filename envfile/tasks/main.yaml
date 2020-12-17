@@ -3,4 +3,4 @@
     src: envfile.j2
     dest: '{{ path }}'
     owner: '{{ owner | default(omit) }}'
-    mode: 0600
+    mode: "a+rw,u-x,go-rwx"

@@ -11,4 +11,4 @@
     password: '{{ htpasswd_password }}'
     owner: '{{ owner | default("root") }}'
     group: '{{ group | default("www-data") }}'
-    mode: '{{ mode | default(0640) }}'
+    mode: '{{ mode | default("a+rw,u-x,g-wx,o-rwx") }}'

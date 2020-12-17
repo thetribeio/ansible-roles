@@ -8,7 +8,7 @@
   copy:
     dest: /etc/nginx/conf.d/http.conf
     src: http.conf
-    mode: 0644
+    mode: "a+rw,u-x,go-wx"
   notify:
     - reload nginx
 
@@ -25,7 +25,7 @@
   copy:
     content: '{{ item.value }}'
     dest: /etc/nginx/sites-available/{{ item.key }}
-    mode: 0644
+    mode: "a+rw,u-x,go-wx"
   when: item.value is not none
   loop: '{{ default_sites|combine(sites)|dict2items }}'
   notify:

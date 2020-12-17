@@ -25,13 +25,13 @@
   file:
     path: '{{ deploy_helper.new_release_path }}'
     state: directory
-    mode: 0755
+    mode: "a+rwx,go-w"
 
 - name: Add an unfinished file
   file:
     path: '{{ deploy_helper.new_release_path }}/{{ deploy_helper.unfinished_filename }}'
     state: touch
-    mode: 0644
+    mode: "a+rw,u-x,go-wx"
 
 - name: Download the archive
   get_url:
