@@ -21,7 +21,7 @@
     deploy_hook: service nginx reload
     certificates:
       - domain: '{{ domain }}'
-        webroot: /var/www/html/
+        webroot: '{{ webroot }}'
 
 - include_role:
     name: nginx
