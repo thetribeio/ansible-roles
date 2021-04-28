@@ -12,6 +12,14 @@
   notify:
     - reload nginx
 
+- name: Add gzip configuration
+  copy:
+    dest: /etc/nginx/conf.d/gzip.conf
+    src: gzip.conf
+    mode: 0644
+  notify:
+    - reload nginx
+
 - name: Remove sites configuration
   file:
     path: /etc/nginx/sites-available/{{ item.key }}
