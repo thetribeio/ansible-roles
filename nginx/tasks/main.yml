@@ -4,6 +4,15 @@
     name: nginx
     update_cache: yes
 
+- name: Fix JS mime type
+  lineinfile:
+    path: /etc/nginx/mime.types
+    regexp: '^( +)[a-z]+/[a-z]+ +js;$'
+    line: '\1text/javascript                       js;'
+    backrefs: true
+  notify:
+    - reload nginx
+
 - name: Add http configuration
   copy:
     dest: /etc/nginx/conf.d/http.conf
