@@ -1,13 +1,16 @@
 ---
-- import_role:
+- name: Configure HTTP VHost
+  import_role:
     name: nginx
   vars:
     sites:
       '{{ site }}-http': '{{ lookup("template", "http.conf.j2") }}'
 
-- meta: flush_handlers
+- name: Ensure NGinx config is reloaded
+  meta: flush_handlers
 
-- include_role:
+- name: Create password file
+  include_role:
     name: htpasswd
   vars:
     htpasswd_path: /etc/nginx/{{ site }}.htpasswd
@@ -15,7 +18,8 @@
     htpasswd_password: '{{ basic_auth_password }}'
   when: basic_auth_password is defined and basic_auth_password is not none
 
-- import_role:
+- name: Generate certificates
+  import_role:
     name: letsencrypt
   vars:
     deploy_hook: service nginx reload
@@ -23,7 +27,8 @@
       - domain: '{{ domain }}'
         webroot: '{{ webroot }}'
 
-- include_role:
+- name: Configure HTTPS VHost
+  include_role:
     name: nginx
   vars:
     sites:
