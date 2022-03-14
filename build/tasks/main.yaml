@@ -12,9 +12,10 @@
 
 - name: Wait for build to finish
   uri:
-    url: https://circleci.com/api/v1.1/project/github/{{ repository_name }}/tree/{{ branch }}?circle-token={{ circleci_token }}&limit=10&shallow=true
+    url: https://circleci.com/api/v1.1/project/github/{{ repository_name }}/tree/{{ branch }}?limit=10&shallow=true
     headers:
        accept: application/json
+       Circle-Token: '{{ circleci_token }}'
   register: builds
   until: builds.json|json_query(query) is not none and (builds.json|json_query(query)).lifecycle == 'finished'
   retries: 180

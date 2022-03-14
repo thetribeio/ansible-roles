@@ -1,9 +1,10 @@
 ---
 - name: Find the artifact URL
   uri:
-    url: https://circleci.com/api/v1.1/project/github/{{ repository_name }}/{{ last_build.build_num }}/artifacts?circle-token={{ circleci_token }}
+    url: https://circleci.com/api/v1.1/project/github/{{ repository_name }}/{{ last_build.build_num }}/artifacts
     headers:
        accept: application/json
+       Circle-Token: '{{ circleci_token }}'
   register: artifacts
 
 - name: Register artifact_url variable
@@ -35,8 +36,10 @@
 
 - name: Download the archive
   get_url:
-    url: '{{ artifact_url }}?circle-token={{ circleci_token }}'
+    url: '{{ artifact_url }}'
     dest: '{{ deploy_helper.new_release_path }}/archive.tar.gz'
+    headers:
+      Circle-Token: '{{ circleci_token }}'
 
 - name: Extract the archive
   unarchive: # noqa 208
