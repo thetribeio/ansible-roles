@@ -52,6 +52,37 @@
     path: '{{ deploy_helper.new_release_path }}/archive.tar.gz'
     state: absent
 
+- name: Create the shared paths if they do not exist
+  file:
+    path: '{{ deploy_helper.shared_path }}/{{ item }}'
+    state: directory
+  with_items: '{{ shared_paths }}'
+
+- name: Setup shared paths rights
+  file:
+    path: '{{ deploy_helper.shared_path }}/{{ item }}'
+    state: directory
+    owner: '{{ running_user }}'
+    recurse: true
+    follow: true
+  with_items: '{{ shared_paths }}'
+
+- name: Link the shared paths
+  file:
+    path: '{{ deploy_helper.new_release_path }}/{{ item }}'
+    state: link
+    src: '{{ deploy_helper.shared_path }}/{{ item }}'
+  with_items: '{{ shared_paths }}'
+
+- name: Setup rights
+  file:
+    path: '{{ deploy_helper.new_release_path }}/{{ item }}'
+    state: directory
+    owner: '{{ running_user }}'
+    recurse: true
+    follow: true
+  with_items: '{{ writable_paths }}'
+
 - name: Run before_finalize commands
   command: '{{ item }}' # noqa 301
   args:
