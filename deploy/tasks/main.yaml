@@ -62,7 +62,7 @@
   file:
     path: '{{ deploy_helper.shared_path }}/{{ item }}'
     state: directory
-    owner: '{{ running_user }}'
+    owner: '{{ app_user }}'
     recurse: true
     follow: true
   with_items: '{{ shared_paths }}'
@@ -78,9 +78,9 @@
   file:
     path: '{{ deploy_helper.new_release_path }}/{{ item }}'
     state: directory
-    owner: '{{ running_user }}'
+    owner: '{{ app_user }}'
     recurse: true
-    follow: true
+    follow: false
   with_items: '{{ writable_paths }}'
 
 - name: Run before_finalize commands
