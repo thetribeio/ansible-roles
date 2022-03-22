@@ -6,17 +6,19 @@
        accept: application/json
        Circle-Token: '{{ circleci_token }}'
   register: artifacts
+  when: artifact_file is not defined
 
 - name: Register artifact_url variable
   set_fact:
     artifact_url: '{{ artifacts.json|json_query(query) }}'
   vars:
     query: '[?path==`{{ (artifact_path is defined) | ternary(artifact_path, "home/circleci/project/" ~ artifact|default("")) }}`].url | [0]'
+  when: artifact_file is not defined
 
 - name: Check that the artifact was found
   fail:
     msg: 'Specified artifact could not be found: {{ artifact }}'
-  when: (artifact_url | length) == 0
+  when: artifact_file is not defined and (artifact_url | length) == 0
 
 - name: Initialize the deploy
   deploy_helper:
@@ -40,6 +42,13 @@
     dest: '{{ deploy_helper.new_release_path }}/archive.tar.gz'
     headers:
       Circle-Token: '{{ circleci_token }}'
+  when: artifact_file is not defined
+
+- name: Copy the archive on the server
+  copy:
+    src: '{{ artifact_file }}'
+    dest: '{{ deploy_helper.new_release_path }}/archive.tar.gz'
+  when: artifact_file is defined
 
 - name: Extract the archive
   unarchive: # noqa 208
