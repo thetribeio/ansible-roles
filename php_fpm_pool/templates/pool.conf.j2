@@ -27,5 +27,5 @@ php_admin_value[{{ key }}] = '{{ value }}'
 {% endfor %}
 
 {% for key, value in env|dictsort %}
-env[{{ key }}] = '{{ value }}'
+env[{{ key }}] = "{{ value }}"
 {% endfor %}
