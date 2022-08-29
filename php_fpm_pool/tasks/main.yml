@@ -8,6 +8,14 @@
     name: php{{ version }}-fpm
     update_cache: true
 
+- name: Configure variables_order
+  lineinfile:
+    path: /etc/php/{{ version }}/fpm/php.ini
+    regexp: '^;?variables_order ?='
+    line: variables_order = "EGPCS"
+  notify:
+    - restart php-fpm
+
 - name: Install php extensions
   apt:
     name: php{{ version }}-{{ item }}
