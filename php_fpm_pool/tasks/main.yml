@@ -10,9 +10,12 @@
 
 - name: Configure variables_order
   lineinfile:
-    path: /etc/php/{{ version }}/fpm/php.ini
+    path: /etc/php/{{ version }}/{{ item }}/php.ini
     regexp: '^;?variables_order ?='
     line: variables_order = "EGPCS"
+  loop:
+   - cli
+   - fpm
   notify:
     - restart php-fpm
 
