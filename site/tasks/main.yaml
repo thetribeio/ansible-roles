@@ -31,5 +31,4 @@
   include_role:
     name: nginx
   vars:
-    sites:
-      '{{ site }}-https': '{{ lookup("template", "https.conf.j2") }}'
+    sites: '{{ [ { "key": site ~ "-https", "value": lookup("template", "https.conf.j2") } ] | items2dict }}'
