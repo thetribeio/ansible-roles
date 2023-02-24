@@ -69,7 +69,7 @@
   with_items: '{{ shared_paths | default([]) }}'
 
 - name: Run before_finalize commands
-  command: '{{ item }}' # noqa 301
+  shell: '{{ item }}' # noqa command-instead-of-shell no-changed-when
   args:
     chdir: '{{ deploy_helper.new_release_path }}'
   with_items: '{{ before_finalize|default([]) }}'
@@ -81,7 +81,7 @@
     state: finalize
 
 - name: Run after_finalize commands
-  command: '{{ item }}' # noqa 301
+  shell: '{{ item }}' # noqa command-instead-of-shell no-changed-when
   args:
     chdir: '{{ deploy_helper.new_release_path }}'
   with_items: '{{ after_finalize|default([]) }}'
