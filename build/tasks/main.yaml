@@ -14,8 +14,8 @@
   uri:
     url: https://circleci.com/api/v1.1/project/github/{{ repository_name }}/tree/{{ branch }}?limit=10&shallow=true
     headers:
-       accept: application/json
-       Circle-Token: '{{ circleci_token }}'
+      accept: application/json
+      Circle-Token: '{{ circleci_token }}'
   register: builds
   until: builds.json|json_query(query) is not none and (builds.json|json_query(query)).lifecycle == 'finished'
   retries: 180
@@ -25,7 +25,7 @@
 
 - name: Register last_build variable
   set_fact:
-    last_build: '{{ builds.json|json_query(query) }}'
+    last_build: '{{ builds.json | json_query(query) }}'
   vars:
     query: '[?vcs_revision==`{{ last_commit_sha }}` && workflows.job_name==`{{ job_name }}`] | [0]'
 

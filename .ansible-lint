@@ -1,0 +1,3 @@
+skip_list:
+  # this should be enabled later when everything is migrated to use FQCN
+  - fqcn

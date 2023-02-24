@@ -14,8 +14,8 @@
     regexp: '^;?variables_order ?='
     line: variables_order = "EGPCS"
   loop:
-   - cli
-   - fpm
+    - cli
+    - fpm
   notify:
     - restart php-fpm
 
