@@ -7,7 +7,7 @@
 - name: Install certbot package
   apt:
     name: certbot
-    update_cache: yes
+    update_cache: true
 
 - name: Configure certbot
   template:

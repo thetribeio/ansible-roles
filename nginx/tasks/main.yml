@@ -2,7 +2,7 @@
 - name: Install nginx package
   apt:
     name: nginx
-    update_cache: yes
+    update_cache: true
 
 - name: Fix JS mime type
   lineinfile:
