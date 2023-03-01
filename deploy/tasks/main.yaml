@@ -20,9 +20,15 @@
     msg: 'Specified artifact could not be found: {{ artifact }}'
   when: artifact_file is not defined and (artifact_url | length) == 0
 
+- name: Generate release name
+  set_fact:
+    release: '{{ now(utc=True, fmt="%Y%m%d%H%M%S") }}'
+  run_once: true
+
 - name: Initialize the deploy
   deploy_helper:
     path: '{{ path }}'
+    release: '{{ release }}'
 
 - name: Create release directory
   file:
