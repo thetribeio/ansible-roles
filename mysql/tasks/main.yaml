@@ -1,0 +1,31 @@
+---
+- name: Install packages
+  apt:
+    name:
+      - mysql-server
+      - '{{ (ansible_python_version is version("3.0.0", ">=")) | ternary("python3-pymysql", "python-mysqldb") }}'
+    update_cache: true
+
+- name: Copy configuration files
+  template:
+    src: my.cnf.j2
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Configure databases
+  mysql_db:
+    name: '{{ item.key }}'
+    state: present
+  loop: '{{ dbs | dict2items }}'
+  when: dbs is defined
+
+- name: Configure users
+  mysql_user:
+    name: '{{ item.key }}'
+    state: present
+    password: '{{ item.value.password }}'
+    priv: '{{ item.value.priv | default("*.*:USAGE") }}'
+  loop: '{{ users | dict2items }}'
+  when: users is defined
