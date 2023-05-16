@@ -1,0 +1,73 @@
+---
+- name: Generate release name
+  ansible.builtin.set_fact:
+    release: '{{ now(utc=True, fmt="%Y%m%d%H%M%S") }}'
+  run_once: true
+
+- name: Initialize the deploy
+  ansible.builtin.deploy_helper:
+    path: '{{ path }}'
+    release: '{{ release }}'
+
+- name: Create release directory
+  ansible.builtin.file:
+    path: '{{ deploy_helper.new_release_path }}'
+    state: directory
+    mode: 0755
+
+- name: Add an unfinished file
+  ansible.builtin.file:
+    path: '{{ deploy_helper.new_release_path }}/{{ deploy_helper.unfinished_filename }}'
+    state: touch
+    mode: 0644
+
+- name: Upload the archive
+  ansible.builtin.copy:
+    src: '{{ artifact_url | urlsplit("path") }}'
+    dest: '{{ deploy_helper.new_release_path }}/archive'
+    mode: 0644
+  when: artifact_url is ansible.builtin.url(schemes=["file"])
+
+- name: Download the archive
+  ansible.builtin.get_url:
+    url: '{{ artifact_url }}'
+    dest: '{{ deploy_helper.new_release_path }}/archive'
+    headers: '{{ artifact_headers }}'
+    mode: 0644
+  when: artifact_url is ansible.builtin.url(schemes=["ftp", "http", "https"])
+
+- name: Extract the archive
+  ansible.builtin.unarchive:
+    remote_src: true
+    src: '{{ deploy_helper.new_release_path }}/archive'
+    dest: '{{ deploy_helper.new_release_path }}'
+
+- name: Remove the archive
+  ansible.builtin.file:
+    path: '{{ deploy_helper.new_release_path }}/archive'
+    state: absent
+
+- name: Link the shared paths
+  ansible.builtin.file:
+    path: '{{ deploy_helper.new_release_path }}/{{ item }}'
+    state: link
+    src: '{{ deploy_helper.shared_path }}/{{ item }}'
+  with_items: '{{ shared_paths }}'
+
+- name: Run before_finalize commands
+  ansible.builtin.shell: '{{ item }}' # noqa command-instead-of-shell no-changed-when
+  args:
+    chdir: '{{ deploy_helper.new_release_path }}'
+  with_items: '{{ before_finalize }}'
+
+- name: Finalize the deploy
+  ansible.builtin.deploy_helper:
+    path: '{{ deploy_helper.project_path }}'
+    release: '{{ deploy_helper.new_release }}'
+    state: finalize
+
+- name: Run after_finalize commands
+  ansible.builtin.shell: '{{ item }}' # noqa command-instead-of-shell no-changed-when
+  args:
+    chdir: '{{ deploy_helper.new_release_path }}'
+  with_items: '{{ after_finalize }}'
