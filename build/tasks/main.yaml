@@ -12,7 +12,7 @@
 
 - name: Wait for build to finish
   uri:
-    url: https://circleci.com/api/v1.1/project/github/{{ repository_name }}/tree/{{ branch }}?limit=10&shallow=true
+    url: https://circleci.com/api/v1.1/project/github/{{ repository_name }}/tree/{{ branch }}?limit=100&shallow=true
     headers:
       accept: application/json
       Circle-Token: '{{ circleci_token }}'
