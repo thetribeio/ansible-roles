@@ -1,4 +1,5 @@
 ---
+artifact_headers: {}
 artifact_url: ~
 shared_paths: []
 before_finalize: []

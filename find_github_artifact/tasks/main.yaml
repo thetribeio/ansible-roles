@@ -6,6 +6,7 @@
       accept: application/vnd.github+json
       authorization: Bearer {{ github_token }}
       x-github-api-version: '2022-11-28'
+  check_mode: false
   register: commits
 
 - name: Get commit
@@ -19,13 +20,14 @@
       accept: application/vnd.github+json
       authorization: Bearer {{ github_token }}
       x-github-api-version: '2022-11-28'
+  check_mode: false
   register: workflows
 
 - name: Get workflow
   ansible.builtin.set_fact:
     workflow: '{{ workflows.json | community.general.json_query(query) }}'
   vars:
-    query: 'workflows[?path==`.github/workflows/{{ workflow_name }}.yaml`] | [0]'
+    query: 'workflows[?path==`.github/workflows/{{ workflow_file }}`] | [0]'
 
 - name: Fetch runs
   ansible.builtin.uri:
@@ -34,6 +36,7 @@
       accept: application/vnd.github+json
       authorization: Bearer {{ github_token }}
       x-github-api-version: '2022-11-28'
+  check_mode: false
   register: runs
 
 - name: Get run
@@ -47,16 +50,25 @@
       accept: application/vnd.github+json
       authorization: Bearer {{ github_token }}
       x-github-api-version: '2022-11-28'
+  check_mode: false
   register: artifacts
 
 - name: Get artifact
   ansible.builtin.set_fact:
     artifact: '{{ artifacts.json.artifacts[0] }}'
 
-- name: Set variables
-  ansible.builtin.set_fact:
-    artifact_url: '{{ artifact.archive_download_url }}'
-    artifact_headers:
+- name: Get the download URL of the artifact
+  ansible.builtin.uri:
+    url: '{{ artifact.archive_download_url }}'
+    follow_redirects: none
+    headers:
       accept: application/vnd.github+json
       authorization: Bearer {{ github_token }}
       x-github-api-version: '2022-11-28'
+    status_code:
+      - 302
+  register: artifact_download
+
+- name: Set variables
+  ansible.builtin.set_fact:
+    artifact_url: '{{ artifact_download.location }}'
