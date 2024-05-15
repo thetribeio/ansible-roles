@@ -1,0 +1,59 @@
+---
+- name: Install prerequisites for Keycloak
+  ansible.builtin.apt:
+    name:
+      - openjdk-17-jdk
+      - unzip
+    state: present
+
+- name: Download Keycloak
+  ansible.builtin.get_url:
+    url: "https://github.com/keycloak/keycloak/releases/download/{{ keycloak_version }}/keycloak-{{ keycloak_version }}.zip"
+    dest: "/tmp/keycloak-{{ keycloak_version }}.zip"
+    mode: '0644'
+
+- name: Extract Keycloak
+  ansible.builtin.unarchive:
+    src: "/tmp/keycloak-{{ keycloak_version }}.zip"
+    dest: "/opt/"
+    creates: "/opt/keycloak-{{ keycloak_version }}"
+    remote_src: true
+
+- name: Create a symbolic link for Keycloak
+  ansible.builtin.file:
+    src: "/opt/keycloak-{{ keycloak_version }}"
+    dest: "/opt/keycloak"
+    state: link
+
+- name: Create keycloak user
+  ansible.builtin.user:
+    name: keycloak
+    system: true
+    shell: /bin/false
+
+- name: Ensure data directory exists and is owned by user keycloak
+  ansible.builtin.file:
+    path: /opt/keycloak/data
+    state: directory
+    owner: keycloak
+    group: keycloak
+    mode: '0750'
+
+- name: Make kc.sh executable
+  ansible.builtin.file:
+    path: /opt/keycloak/bin/kc.sh
+    mode: '0755'
+
+- name: Configure Keycloak service
+  ansible.builtin.template:
+    src: keycloak.conf.j2
+    dest: "/etc/systemd/system/keycloak.service"
+    mode: '0644'
+  notify:
+    - restart service keycloak
+
+- name: Enable and start the Keycloak service
+  ansible.builtin.systemd:
+    name: keycloak
+    enabled: true
+    state: started
