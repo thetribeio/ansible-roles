@@ -67,6 +67,7 @@
       x-github-api-version: '2022-11-28'
     status_code:
       - 302
+  check_mode: false
   register: artifact_download
 
 - name: Set variables
