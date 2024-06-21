@@ -1,0 +1,7 @@
+keycloak_version: "24.0.4"
+kc_db: "postgres"
+kc_db_url: "jdbc:postgresql://postgres:5432/keycloak"
+kc_db_username: "user"
+kc_db_password: "password"
+kc_hostname: "localhost"
+kc_log_level: "INFO"

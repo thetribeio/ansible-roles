@@ -1,0 +1,25 @@
+[Unit]
+Description=Keycloak
+After=network.target
+
+[Service]
+Type=idle
+User=keycloak
+ExecStart=/opt/keycloak/bin/kc.sh start
+Environment="KC_DB={{ kc_db }}"
+Environment="KC_DB_URL={{ kc_db_url }}"
+Environment="KC_DB_USERNAME={{ kc_db_username }}"
+Environment="KC_DB_PASSWORD={{ kc_db_password|replace('\\', '\\x5c')|replace('"', '\\x22')|replace('%', '%%') }}"
+Environment="KC_LOG_LEVEL={{ kc_log_level }}"
+Environment="KEYCLOAK_ADMIN={{ keycloak_admin_username }}"
+Environment="KEYCLOAK_ADMIN_PASSWORD={{ keycloak_admin_password|replace('\\', '\\x5c')|replace('"', '\\x22')|replace('%', '%%')}}"
+Environment="KC_HOSTNAME={{ kc_hostname }}"
+Environment="KC_HOSTNAME_STRICT=false"
+Environment="KC_HTTP_RELATIVE_PATH=/"
+Environment="KC_PROXY=edge"
+Environment="KC_LOG_LEVEL=DEBUG"
+
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
