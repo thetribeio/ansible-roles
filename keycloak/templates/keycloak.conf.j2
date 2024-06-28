@@ -5,6 +5,7 @@ After=network.target
 [Service]
 Type=idle
 User=keycloak
+ExecStartPre=/opt/keycloak/bin/kc.sh build
 ExecStart=/opt/keycloak/bin/kc.sh start
 Environment="KC_DB={{ kc_db }}"
 Environment="KC_DB_URL={{ kc_db_url }}"
