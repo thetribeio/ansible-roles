@@ -1,5 +1,5 @@
 ---
-- name: Restart service keycloak
+- name: restart service keycloak
   systemd:
     name: 'keycloak'
     state: restarted
