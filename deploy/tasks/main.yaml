@@ -25,6 +25,12 @@
     release: '{{ now(utc=True, fmt="%Y%m%d%H%M%S") }}'
   run_once: true
 
+- name: Clean failed releases
+  deploy_helper:
+    path: '{{ path }}'
+    state: clean
+  when: clean_before
+
 - name: Initialize the deploy
   deploy_helper:
     path: '{{ path }}'
@@ -85,6 +91,7 @@
     path: '{{ deploy_helper.project_path }}'
     release: '{{ deploy_helper.new_release }}'
     state: finalize
+    keep_releases: '{{ keep_releases | default(5) }}'
 
 - name: Run after_finalize commands
   shell: '{{ item }}' # noqa command-instead-of-shell no-changed-when
