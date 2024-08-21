@@ -91,7 +91,7 @@
     path: '{{ deploy_helper.project_path }}'
     release: '{{ deploy_helper.new_release }}'
     state: finalize
-    keep_releases: '{{ keep_releases | default(5) }}'
+    keep_releases: '{{ keep_releases }}'
 
 - name: Run after_finalize commands
   shell: '{{ item }}' # noqa command-instead-of-shell no-changed-when
