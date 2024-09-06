@@ -4,3 +4,4 @@ artifact_url: ~
 shared_paths: []
 before_finalize: []
 after_finalize: []
+strip_top_level_directory: false
