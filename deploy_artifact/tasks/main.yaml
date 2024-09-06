@@ -41,6 +41,7 @@
     remote_src: true
     src: '{{ deploy_helper.new_release_path }}/archive'
     dest: '{{ deploy_helper.new_release_path }}'
+    extra_opts: '{{ strip_top_level_directory | ternary(["--strip-components=1"], []) }}'
 
 - name: Remove the archive
   ansible.builtin.file:
